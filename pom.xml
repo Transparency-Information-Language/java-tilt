@@ -49,5 +49,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>1.0.42</version>
+        </dependency>
+
     </dependencies>
 </project>
