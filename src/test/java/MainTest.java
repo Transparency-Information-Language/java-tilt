@@ -1,16 +1,18 @@
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.ValidationMessage;
 import org.apache.commons.io.IOUtils;
 
+import org.everit.json.schema.Schema;
+import org.everit.json.schema.ValidationException;
+import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.*;
@@ -101,7 +103,7 @@ public class MainTest {
     public void generateSources() throws JsonProcessingException {
         ArrayList<Source> sourceList = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 20; i++) {
             Source source = new Source();
             source.setID("" + Math.random());
             source.setDataCategory(UUID.randomUUID().toString());
@@ -136,12 +138,14 @@ public class MainTest {
         System.out.println(tilt.getMeta().toString());
     }
 
-    /**
-    @Test
-    public void validate() throws Exception {
+
+/*    @Test
+    public void validateLegacy() throws Exception {
         BaseJsonSchemaValidator validator = new BaseJsonSchemaValidator();
 
         String schema_content = IOUtils.toString(URI.create(TILT_SCHEMA_URL), "utf8");
+        schema_content = schema_content.replace("draft-07/schema", "draft-07/schema#");
+        System.out.println("schema_content = " + schema_content);
         String instance_content = IOUtils.toString(URI.create(TILT_VALID_DOCUMENT_URL), "utf8");
 
 
@@ -151,6 +155,30 @@ public class MainTest {
         Set<ValidationMessage> errors = schema.validate(document);
         System.out.println(errors.size());
 
-    }*/
+    } */
+
+    @Test
+    public void validateDocument() {
+        try {
+            String schema_content = IOUtils.toString(URI.create(TILT_SCHEMA_URL), "utf8");
+            JSONObject rawSchema = new JSONObject(new JSONTokener(schema_content));
+            Schema schema = SchemaLoader.load(rawSchema);
+
+            String instance_content = IOUtils.toString(URI.create(TILT_VALID_DOCUMENT_URL), "utf8");
+            schema.validate(new JSONObject(instance_content));
+            System.out.println("Document " + TILT_VALID_DOCUMENT_URL + " seems to be valid!\n");
+
+            instance_content = IOUtils.toString(URI.create(TILT_INVALID_DOCUMENT_URL), "utf8");
+            schema.validate(new JSONObject(instance_content));
+            System.out.println("Document " + TILT_INVALID_DOCUMENT_URL + "seems to be valid!");
+        } catch (ValidationException e) {
+            for(String s : e.getAllMessages())
+                System.out.println(s);
+            //for(Exception ex : e.getCausingExceptions())
+            //    System.out.println(ex.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

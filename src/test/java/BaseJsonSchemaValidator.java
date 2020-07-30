@@ -17,8 +17,8 @@
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
+// import com.networknt.schema.JsonSchema;
+// import com.networknt.schema.JsonSchemaFactory;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -28,7 +28,7 @@ import java.net.URL;
  * Adapted by eliasgruenewald 30/07/2020.
  */
 public class BaseJsonSchemaValidator {
-    protected JsonNode getJsonNodeFromClasspath(String name) throws Exception {
+  /*  protected JsonNode getJsonNodeFromClasspath(String name) throws Exception {
         InputStream is1 = Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream(name);
 
@@ -74,5 +74,5 @@ public class BaseJsonSchemaValidator {
         JsonSchemaFactory factory = JsonSchemaFactory.getInstance();
         JsonSchema schema = factory.getSchema(jsonNode);
         return schema;
-    }
+    } */
 }
