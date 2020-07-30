@@ -11,7 +11,7 @@ public class Tilt {
     private List<DataDisclosedElement> dataDisclosed;
     private List<ThirdCountryTransferElement> thirdCountryTransfers;
     private AccessAndDataPortability accessAndDataPortability;
-    private List<TiltSource> sources;
+    private List<Source> sources;
     private RightToInformation rightToInformation;
     private RightToRectificationOrDeletion rightToRectificationOrDeletion;
     private RightToDataPortability rightToDataPortability;
@@ -121,9 +121,9 @@ public class Tilt {
      * not take place from the data subject (Art. 14).
      */
     @JsonProperty("sources")
-    public List<TiltSource> getSources() { return sources; }
+    public List<Source> getSources() { return sources; }
     @JsonProperty("sources")
-    public void setSources(List<TiltSource> value) { this.sources = value; }
+    public void setSources(List<Source> value) { this.sources = value; }
 
     /**
      * This schema refers to the adequacy decisions of any third country transfers.

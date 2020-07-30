@@ -1,7 +1,9 @@
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.ValidationMessage;
 import org.apache.commons.io.IOUtils;
 
 import org.json.JSONObject;
@@ -11,16 +13,16 @@ import org.junit.Test;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
 public class MainTest {
 
     private static Tilt tilt;
+    public static final String TILT_SCHEMA_URL = "https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt-schema.json";
+    public static final String TILT_VALID_DOCUMENT_URL = "https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt.json";
+    public static final String TILT_INVALID_DOCUMENT_URL = "https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt-NOT-valid.json";
 
 
     @BeforeClass
@@ -58,9 +60,7 @@ public class MainTest {
     @Test
     public void readDocumentFromUrl() {
         try {
-
-            String url = "https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt.json";
-            String instance = IOUtils.toString(URI.create(url), "utf8");
+            String instance = IOUtils.toString(URI.create(TILT_VALID_DOCUMENT_URL), "utf8");
 
             System.out.println(instance.indexOf("meta"));
 
@@ -88,9 +88,7 @@ public class MainTest {
 
     @Test
     public void getAnotherInstance() throws IOException {
-        String url = "https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt.json";
-        String instance = IOUtils.toString(URI.create(url), "utf8");
-
+        String instance = IOUtils.toString(URI.create(TILT_VALID_DOCUMENT_URL), "utf8");
         Tilt t = Converter.fromJsonString(instance);
         System.out.println("t = " + t);
 
@@ -101,23 +99,23 @@ public class MainTest {
 
     @Test
     public void generateSources() throws JsonProcessingException {
-        ArrayList<TiltSource> tiltSourceList = new ArrayList<>();
+        ArrayList<Source> sourceList = new ArrayList<>();
 
         for (int i = 0; i < 100; i++) {
-            TiltSource tiltSource = new TiltSource();
-            tiltSource.setID("" + Math.random());
-            tiltSource.setDataCategory(UUID.randomUUID().toString());
+            Source source = new Source();
+            source.setID("" + Math.random());
+            source.setDataCategory(UUID.randomUUID().toString());
             ArrayList<SourceSource> sourceSources = new ArrayList<>();
             SourceSource sourceSource = new SourceSource();
             sourceSource.setDescription("ABC");
             sourceSource.setPubliclyAvailable(true);
             sourceSource.setURL("https://" + UUID.randomUUID().toString() + ".org");
             sourceSources.add(sourceSource);
-            tiltSource.setSources(sourceSources);
-            tiltSourceList.add(tiltSource);
+            source.setSources(sourceSources);
+            sourceList.add(source);
         }
 
-        tilt.setSources(tiltSourceList);
+        tilt.setSources(sourceList);
 
         prettyPrintTilt(tilt);
     }
@@ -137,5 +135,22 @@ public class MainTest {
 
         System.out.println(tilt.getMeta().toString());
     }
+
+    /**
+    @Test
+    public void validate() throws Exception {
+        BaseJsonSchemaValidator validator = new BaseJsonSchemaValidator();
+
+        String schema_content = IOUtils.toString(URI.create(TILT_SCHEMA_URL), "utf8");
+        String instance_content = IOUtils.toString(URI.create(TILT_VALID_DOCUMENT_URL), "utf8");
+
+
+        JsonSchema schema = validator.getJsonSchemaFromStringContent(schema_content);
+        JsonNode document = validator.getJsonNodeFromStringContent(instance_content);
+
+        Set<ValidationMessage> errors = schema.validate(document);
+        System.out.println(errors.size());
+
+    }*/
 }
 

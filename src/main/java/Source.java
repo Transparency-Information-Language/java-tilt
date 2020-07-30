@@ -2,7 +2,7 @@ import com.fasterxml.jackson.annotation.*;
 import java.util.List;
 
 
-public class TiltSource {
+public class Source {
     private String id;
     private String dataCategory;
     private List<SourceSource> sources;
@@ -31,7 +31,7 @@ public class TiltSource {
 
     @Override
     public String toString() {
-        return "TiltSource{" +
+        return "Source{" +
                 "id='" + id + '\'' +
                 ", dataCategory='" + dataCategory + '\'' +
                 ", sources=" + sources +
