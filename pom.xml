@@ -7,6 +7,20 @@
     <groupId>cloud.implementation.tilt</groupId>
     <artifactId>tilt</artifactId>
     <version>0.0.1</version>
+
+    <name>java-tilt</name>
+    <description>java-tilt is a Java based language binding for the Transparency Information Language and Toolkit.</description>
+    <url>https://github.com/Transparency-Information-Language/java-tilt</url>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.de.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+
     <build>
         <plugins>
             <plugin>
