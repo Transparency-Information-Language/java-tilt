@@ -75,11 +75,13 @@
         </dependency>
     </dependencies>
 
-    <repositories>
+
+    <distributionManagement>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Transparency-Information-Language/java-tilt</url>
         </repository>
-    </repositories>
+    </distributionManagement>
 
 </project>
