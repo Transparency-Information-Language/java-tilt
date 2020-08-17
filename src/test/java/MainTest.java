@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class MainTest {
 
@@ -158,27 +158,16 @@ public class MainTest {
     } */
 
     @Test
-    public void validateDocument() {
-        try {
-            String schema_content = IOUtils.toString(URI.create(TILT_SCHEMA_URL), "utf8");
-            JSONObject rawSchema = new JSONObject(new JSONTokener(schema_content));
-            Schema schema = SchemaLoader.load(rawSchema);
+    public void validateDocuments() {
+        System.out.println("--- Document #1 ---");
+        boolean validationResult = TiltValidator.validateDocumentFromUrl(TILT_VALID_DOCUMENT_URL, TILT_SCHEMA_URL);
+        assertTrue(validationResult);
+    }
 
-            String instance_content = IOUtils.toString(URI.create(TILT_VALID_DOCUMENT_URL), "utf8");
-            schema.validate(new JSONObject(instance_content));
-            System.out.println("Document " + TILT_VALID_DOCUMENT_URL + " seems to be valid!\n");
-
-            instance_content = IOUtils.toString(URI.create(TILT_INVALID_DOCUMENT_URL), "utf8");
-            schema.validate(new JSONObject(instance_content));
-            System.out.println("Document " + TILT_INVALID_DOCUMENT_URL + "seems to be valid!");
-        } catch (ValidationException e) {
-            for(String s : e.getAllMessages())
-                System.out.println(s);
-            //for(Exception ex : e.getCausingExceptions())
-            //    System.out.println(ex.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Test public void validateAnotherDocument() {
+        System.out.println("--- Document #2 ---");
+        boolean validationResult = TiltValidator.validateDocumentFromUrl(TILT_INVALID_DOCUMENT_URL);
+        assertFalse(validationResult);
     }
 }
 
