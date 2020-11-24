@@ -72,7 +72,7 @@ try {
 ```
 
 ## Author
-Elias Grünewald
+[Elias Grünewald](mailto:gruenewald@tu-berlin.de)
 
 ## License
-[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.de.html)
+[MIT License](LICENSE)
