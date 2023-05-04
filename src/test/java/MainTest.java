@@ -1,6 +1,14 @@
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import cloud.implementation.tilt.Converter;
+import cloud.implementation.tilt.Meta;
+import cloud.implementation.tilt.Source;
+import cloud.implementation.tilt.SourceSource;
+import cloud.implementation.tilt.Tilt;
+import cloud.implementation.tilt.TiltValidator;
+
 import org.apache.commons.io.IOUtils;
 
 import org.everit.json.schema.Schema;
@@ -26,6 +34,10 @@ public class MainTest {
     public static final String TILT_VALID_DOCUMENT_URL = "https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt.json";
     public static final String TILT_INVALID_DOCUMENT_URL = "https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt-NOT-valid.json";
 
+    protected String getExampleFromSchema() throws IOException {
+        String schema = IOUtils.toString(URI.create(TILT_SCHEMA_URL), "utf8");
+        return new JSONObject(schema).getJSONArray("examples").getJSONObject(0).toString();
+    }
 
     @BeforeClass
     public static void testSetup() {
@@ -34,7 +46,7 @@ public class MainTest {
         Meta m = new Meta();
         m.setLanguage("de");
         m.setName("My Green Company");
-        m.setURL("https://privacy.implementation.cloud");
+        m.setURL(List.of("https://privacy.implementation.cloud"));
 
         tilt.setMeta(m);
     }
@@ -90,7 +102,9 @@ public class MainTest {
 
     @Test
     public void getAnotherInstance() throws IOException {
-        String instance = IOUtils.toString(URI.create(TILT_VALID_DOCUMENT_URL), "utf8");
+        // String instance = IOUtils.toString(URI.create(TILT_VALID_DOCUMENT_URL), "utf8");
+        String instance = getExampleFromSchema();
+        System.out.println(instance);
         Tilt t = Converter.fromJsonString(instance);
         System.out.println("t = " + t);
 
@@ -111,7 +125,7 @@ public class MainTest {
             SourceSource sourceSource = new SourceSource();
             sourceSource.setDescription("ABC");
             sourceSource.setPubliclyAvailable(true);
-            sourceSource.setURL("https://" + UUID.randomUUID().toString() + ".org");
+            sourceSource.setURL(List.of("https://" + UUID.randomUUID().toString() + ".org"));
             sourceSources.add(sourceSource);
             source.setSources(sourceSources);
             sourceList.add(source);
